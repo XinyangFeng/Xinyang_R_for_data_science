@@ -1,0 +1,96 @@
+---
+title: "Chapter 1. P12 exercise"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+```{r}
+# P12. Exercise
+# 1. What’s gone wrong with this code? Why are the points not blue?
+ggplot(data = mpg) +
+  geom_point(
+    mapping = aes(x = displ, y = hwy, color = "blue")
+  )
+# A. color argument should go outside of aes()
+```
+
+```{r}
+# 2. Which variables in mpg are categorical? Which variables are continuous? (Hint: type ?mpg to read the 
+# documentation for the dataset.) How can you see this information when you run mpg?
+?mpg
+ggplot2 :: mpg
+# A. Categorical variables in R are called characters. They are stored as strings (i.e., text) which are text 
+# placed within quotes. Categorical variables in mpg include: manufacturer, model, trans (type of transmission),
+# drv (front-wheel drive, rear-wheel, 4wd), fl (fuel type), and class (type of car). Continuous variables in R are 
+# called doubles or integers. Continuous variables in mpg include: displ (engine displacement in litres), 
+# cyl (number of cylinders), cty (city miles/gallon), and hwy (highway gallons/mile).
+```
+
+```{r}
+# 3. Map a continuous variable to color, size, and shape. How do these aesthetics behave differently for categorical
+# versus continuous variables?
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x=displ, y=hwy, size=cty))
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x=displ, y=hwy, colour=manufacturer))
+# A. For the aesthetics color, size, and shape the continuous variables are visualized on a spectrum whereas 
+# categorical variables are binned into discrete categories.
+```
+
+```{r}
+# 4. What happens if you map the same variable to multiple aesthetics?
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x=displ, y=hwy, size=cty, colour=cty))
+# A. Both aesthetics are mapped and multiple legends are generated.
+```
+
+```{r}
+# 5. What does the stroke aesthetic do? What shapes does it work with? (Hint: use ?geom_point.)
+?geom_point()
+vignette("ggplot2-specs") # Aesthetic specifications
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point(shape = 21, colour = "black", fill = "white", size = 5, stroke = 5)
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point(shape = 21, colour = "black", fill = "white", size = 5, stroke = 8)
+# A. the stroke aesthetic to modify the width of the border as for shapes can take different colours both inside
+# and outside.
+```
+
+```{r}
+# 6. What happens if you map an aesthetic to something other than a variable name, like aes(color = displ < 5)?
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x=displ, y=hwy, colour=displ<5))
+# A. R executes code and creates a temporary variable containing the results of the operation. Here, the new 
+# variable takes on a value of TRUE if the engine displacement is less than 5 or FALSE if the engine displacement
+# is more than or equal to 5.
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

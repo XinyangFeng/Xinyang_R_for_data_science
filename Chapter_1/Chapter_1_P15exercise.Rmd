@@ -1,0 +1,91 @@
+---
+title: "Chapter_1 P15 exercise"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+```{r}
+# 1. What happens if you facet on a continuous variable?
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x=displ, y=hwy)) +
+  facet_wrap(.~cty)
+# A. The continuous variable is converted to a categorical variable, and the plot contains a facet for each distinct value.
+```
+
+```{r}
+# 2. What do the empty cells in a plot with facet_grid(drv ~ cyl) mean? How do they relate to this plot?
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = drv, y = cyl))
+ggplot(data = mpg) +
+  facet_grid(drv ~ cyl)
+# The empty cells (facets) in this plot are combinations of drv and cyl that have no observations.
+# These are the same locations in the scatter plot of drv and cyl that have no points.
+```
+
+```{r}
+# 3. What plots does the following code make? What does . do?
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_grid(drv ~ .)
+# drv ~ . facet by values of drv on the y-axis
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_grid(. ~ cyl)
+# . ~ cyl facet by values of cyl on the x-axis
+```
+
+```{r}
+# 4. Take the first faceted plot in this section:
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_wrap(~ class, nrow = 2)
+# What are the advantages to using faceting instead of the color aesthetic? What are the disadvantages? How might
+# the balance change if you had a larger dataset?
+
+# https://jrnold.github.io/r4ds-exercise-solutions/data-visualisation.html
+```
+
+```{r}
+# 5. Read ?facet_wrap. What does nrow do? What does ncol do? What other options control the layout of the 
+# individual panels? Why doesn’t facet_grid() have nrow and ncol variables?
+?facet_wrap()
+?facet_grid()
+# A. it refers to the number of rows and columns; as.table and switch; facet_grid() forms a matrix of panels defined by row and column faceting variables
+```
+
+```{r}
+# 6. When using facet_grid() you should usually put the variable with more unique levels in the columns. Why?
+# A. There will be more space for columns if the plot is laid out horizontally
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

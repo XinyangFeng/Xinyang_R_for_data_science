@@ -1,0 +1,108 @@
+---
+title: "Chapter 3 P58 exercise"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+```{r}
+# 1. Currently dep_time and sched_dep_time are convenient to look at, but hard to compute with because they’re not really continuous numbers. Convert them to a more convenient representation of number of minutes since midnight.
+flights
+(variable1 <- mutate(flights,
+  dep_time_hour = dep_time %/% 100 * 60,
+  dep_time_min = dep_time %% 100,
+  dep_time_new = dep_time_hour + dep_time_min
+))
+
+(flight_times <- mutate(flights,
+  dep_time_mins = (dep_time %/% 100 * 60 + dep_time %% 100) %% 1440,
+  sched_dep_time_mins = (sched_dep_time %/% 100 * 60 + sched_dep_time %% 100) %% 1440
+))
+```
+
+```{r}
+# 2. Compare air_time with arr_time - dep_time. What do you expect to see? What do you see? What do you need to do to fix it?
+# I exepect air_time equals to the difference between arr_time and dep_time. First I need to transform these data to a more amenable form.
+flights
+(flights_airtime <-
+  mutate(flights,
+    arr_time_mins = (arr_time %/% 100 * 60 + arr_time %% 100) %% 1440,
+    dep_time_mins = (dep_time %/% 100 * 60 + dep_time %% 100) %% 1440,
+    air_time_diff = air_time - (arr_time_mins - dep_time_mins)
+))
+nrow(filter(flights_airtime, air_time_diff != 0))
+# there are two reasons for this. The first might be the flights passed midnight. The second might be the flights flew over time zones.
+# Both of these explanations have clear patterns that I would expect to see if they were true. In particular, in both cases, since time-zones and crossing midnight only affects the hour part of the time, all values of air_time_diff should be divisible by 60. I’ll visually check this hypothesis by plotting the distribution of air_time_diff. If those two explanations are correct, distribution of air_time_diff should comprise only spikes at multiples of 60.
+ggplot(data = flights_airtime, mapping = aes(x = air_time_diff)) +
+  geom_histogram(binwidth = 1)
+# This is apparently not the case.
+#  It appears that the air_time variable refers to flight time, which is defined as the time between wheels-off (take-off) and wheels-in (landing). But the flight time does not include time spent on the runway taxiing to and from gates. With this new understanding of the data, I now know that the relationship between air_time, arr_time, and dep_time is air_time <= arr_time - dep_time, supposing that the time zones of arr_time and dep_time are in the same time zone.
+```
+
+```{r}
+# 3. Compare dep_time, sched_dep_time, and dep_delay. How would you expect those three numbers to be related?
+# I expect dep_delay equals to the differencee between dep_time and sched_dep_time. First transform the data to an amenable form.
+flights
+(flights_delay <-
+    mutate(flights,
+      dep_time_mins = (dep_time %/% 100 * 60 + dep_time %% 100) %% 1440,
+      sched_dep_time_mins = (sched_dep_time %/% 100 * 60 + sched_dep_time %% 100) %% 1440,
+      dep_delay_diff = dep_delay - (dep_time_mins - sched_dep_time_mins)
+    )
+)
+nrow(filter(flights_delay, dep_delay_diff != 0))
+ggplot(
+  filter(flights_delay, dep_delay_diff > 0),
+  mapping = aes(x = dep_delay_diff, y = sched_dep_time_mins)
+) +
+  geom_point()
+```
+
+```{r}
+# 4. Find the 10 most delayed flights using a ranking function. How do you want to handle ties? Carefully read the documentation for min_rank().
+?min_rank()
+(flights_delayed <- 
+  mutate(flights, min_rank(desc(dep_delay))))
+```
+ 
+```{r}
+# 5. What does 1:3 + 1:10 return? Why?
+1 : 3 + 1 : 10
+# When adding two vectors, R recycles the shorter vector’s values to create a vector of the same length as the longer vector. 
+```
+ 
+```{r}
+# 6. What trigonometric functions does R provide?
+?Trig
+```
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

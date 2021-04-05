@@ -1,0 +1,102 @@
+---
+title: "Chapter_1 P33 exercise"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* ?utton within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file?containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does ?ot run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+```{r}
+# 1. Turn a stacked bar chart into a pie chart using coord_polar()
+ggplot(mpg, aes(x = factor(1), fill = drv)) +
+  geom_bar()
+
+ggplot(mpg, a?s(x = factor(1), fill = drv)) +
+  geom_bar(width = 1) +
+  coord_polar(theta = "y")
+
+?coord_polar()
+```
+
+```{r}
+# 2. What does labs() do? Read the documentation.
+?labs
+# A. The labs function adds axis titles, plot titles, and a caption to the plot.
+ggplot(d?ta = mpg, mapping = aes(x = class, y = hwy)) +
+  geom_boxplot() +
+  coord_flip() +
+  labs(
+    x = 'Class',
+    y = 'Highway MPG',
+    title = 'Highway MPG by car class',
+    subtitle = '1999 - 2008',
+    caption = 'Source: http://fueleconomy.gov'
+  )
+```
+?```{r}
+# 3.  What's the difference between coord_quickmap() and coord_map()?
+?coord_quickmap()
+?coord_map()
+# A. coord_map() projects a portion of the earth, which is approximately spherical, onto a flat 2D plane using any projection defined by the mapproj?package. Map projections do not, in general, preserve straight lines, so this requires considerable computation. coord_quickmap is a quick approximation that does preserve straight lines. It works best for smaller areas closer to the equator.
+```
+
+```{r}
+#?4. What does the following plot tell you about the relationship between city and highway mpg? Why is coord_fixed() important? What does geom_abline() do?
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
+  geom_point() +
+  geom_abline() +
+  coord_fixed?)
+
+?geom_abline() # These geoms add reference lines (sometimes called rules) to a plot, either horizontal, vertical, or diagonal (specified by slope and intercept). These are useful for annotating plots.
+?coord_fixed() # A fixed scale coordinate system for?es a specified ratio between the physical representation of data units on the axes. The ratio represents the number of units on the y-axis equivalent to one unit on the x-axis. The default, ratio = 1, ensures that one unit on the x-axis is the same length ?s one unit on the y-axis. Ratios higher than one make units on the y axis longer than units on the x-axis, and vice versa. This is similar to MASS::eqscplot(), but it works for all types of graphics
+
+# The function coord_fixed() ensures that the line produ?ed by geom_abline() is at a 45-degree angle. A 45-degree line makes it easy to compare the highway and city mileage to the case in which city and highway MPG were equal.
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

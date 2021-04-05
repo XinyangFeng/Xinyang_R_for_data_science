@@ -1,0 +1,120 @@
+---
+title: "Chapter_1 P20 exercise"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+```{r}
+# 1. What geom would you use to draw a line chart? A boxplot? A histogram? An area chart?
+?geom_line
+?geom_boxplot
+?geom_histogram
+?geom_area
+```
+
+```{r}
+# 2. Run this code in your head and predict what the output will look like. Then, run the code in R and check your predictions:
+ggplot(
+  data = mpg,
+  mapping = aes(x = displ, y = hwy, color = drv)
+) +
+  geom_point() +
+  geom_smooth(se = FALSE)
+```
+
+```{r}
+# 3. What does show.legend = FALSE do? What happens if you remove it? Why do you think I used it earlier in the chapter?
+# A. The theme option show.legend = FALSE hides the legend box.
+```
+
+```{r}
+# 4. What does the se argument to geom_smooth() do?
+# A. It adds standard error bands to the lines.
+```
+
+```{r}
+# 5. Will these two graphs look different? Why/why not?
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point() +
+  geom_smooth()
+
+ggplot() +
+  geom_point(
+    data = mpg,
+    mapping = aes(x = displ, y = hwy)
+) +
+  geom_smooth(
+    data = mpg,
+    mapping = aes(x = displ, y = hwy)
+)
+```
+
+```{r}
+# 6. Re-create the R code necessary to generate the following graphs.
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(colour = 'black') +
+  geom_smooth(se = FALSE)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(colour = 'black') +
+  geom_smooth(mapping = aes(class = drv),
+              se = FALSE)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, colour = drv)) +
+  geom_point() +
+  geom_smooth(se = FALSE)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(colour = drv)) +
+  geom_smooth(se = FALSE)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(colour = drv)) +
+  geom_smooth(mapping = aes(linetype = drv),
+              se = FALSE)
+
+?geom_point
+vignette("ggplot2-specs")
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(size = 4, colour = 'white') +
+  geom_point(mapping = aes(colour = drv))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

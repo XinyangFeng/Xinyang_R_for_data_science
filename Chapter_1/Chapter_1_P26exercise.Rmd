@@ -1,0 +1,90 @@
+---
+title: "Chapter_1 P26 exercise"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+```{r}
+# 1. What is the default geom associated with stat_summary()?How could you rewrite the previous plot to use that
+# geom function instead of the stat function?
+?stat_summary
+?geom_pointrange()
+# the default geom associated with stat_summary() is geom_pointrange(), the default stat associated with 
+# geom_pointrange() is identity. we can add the argument stat = "summary" to use stat_summary() instead of stat_identity().  
+```
+
+```{r}
+# 2. What does geom_col() do? How is it different to geom_bar()?
+?geom_col()
+?geom_bar()
+# A. There are two types of bar charts: geom_bar() and geom_col(). geom_bar() makes the height of the bar proportional to the number of cases in each group (or if the weight aesthetic is supplied, the sum of the weights). If you want the heights of the bars to represent values in the data, use geom_col() instead
+```
+
+```{r}
+# 3. Most geoms and stats come in pairs that are almost always used in concert. Read through the documentation and make a list of all the pairs. What do they have in common?
+# A. They often have the same name.
+```
+
+```{r}
+# 4. What variables does stat_smooth() compute? What parameters control its behavior?
+?stat_smooth()
+# y: predicted value; ymin: lower pointwise confidence interval around the mean; ymax: upper pointwise confidence
+# interval around the mean; se: standard error
+```
+
+```{r}
+# 5. In our proportion bar chart, we need to set group = 1. Why? In other words what is the problem with these two graphs?
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut, y = ..prop..))
+
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut, y = ..prop.., group = 1))
+
+ggplot(data = diamonds) +
+  geom_bar(
+    mapping = aes(x = cut, fill = color, y = ..prop..)
+)
+
+ggplot(data = diamonds) +
+  geom_bar(
+    mapping = aes(x = cut, fill = color, y = ..prop.., group = 1)
+)
+# If group = 1 is not included, then all the bars in the plot will have the same height, a height of 1. The function geom_bar() assumes that the groups are equal to the x values since the stat computes the counts within the group.
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

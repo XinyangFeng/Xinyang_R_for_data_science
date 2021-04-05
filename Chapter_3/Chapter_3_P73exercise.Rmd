@@ -1,0 +1,144 @@
+---
+title: "Chapter 3 P72 exercise"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+```{r}
+# 1. Brainstorm at least five different ways to assess the typical delay characteristics of a group of flights. Consider the following scenarios:
+# • A flight is 15 minutes early 50% of the time, and 15 minutes late 50% of the time.
+# • A flight is always 10 minutes late.
+# • A flight is 30 minutes early 50% of the time, and 30 minutes late 50% of the time.
+# • 99% of the time a flight is on time. 1% of the time it’s 2 hours late.
+# Which is more important: arrival delay or departure delay?
+flights
+# first transform the data to an amenable form
+(varaible1 <- mutate(flights,
+  arr_time_mins = (arr_time %/% 100 * 60 + arr_time %% 100) %% 1440,
+  sched_arr_time_mins = (sched_arr_time %/% 100 * 60+ sched_arr_time %% 100) %% 1440,
+  arr_time_diff = arr_time_mins - sched_arr_time_mins
+))
+?summarise()
+variable1 %>%
+  group_by(flight, tailnum) %>%
+  summarise(
+    count = n()
+  )
+# arr_delay is more important for customers
+```
+
+```{r}
+# 2. Come up with another approach that will give you the same output as not_cancelled %>% count(dest) and not_cancel led %>% count(tailnum, wt = distance) (without using count()).
+not_cancelled <- flights %>%
+  filter(!is.na(dep_delay), !is.na(arr_delay))
+
+not_cancelled %>%
+  count(dest)
+not_cancelled %>%
+  count(tailnum, wt = distance)
+
+not_cancelled %>%
+  group_by(dest) %>%
+  summarise(n = length(dest))
+
+not_cancelled %>%
+  group_by(dest) %>%
+  summarise(n = n())
+
+not_cancelled %>%
+  group_by(tailnum) %>%
+  summarise(n = sum(distance))
+```
+
+```{r}
+# 3. Our definition of cancelled flights (is.na(dep_delay) | is.na(arr_delay) ) is slightly suboptimal. Why? Which is the most important column?
+# If a flight never departs, then it won’t arrive. A flight could also depart and not arrive if it crashes, or if it is redirected and lands in an airport other than its intended destination. So the most important column is arr_delay, which indicates the amount of delay in arrival.
+```
+
+```{r}
+# 4. Look at the number of cancelled flights per day. Is there a pattern? Is the proportion of cancelled flights related to the average delay?
+library(tidyverse)
+library(nycflights13)
+library(dplyr)
+flights
+# it doesn't work
+cancelled_per_day <- flights %>%
+  mutate(cancelled = (is.na(dep_delay | is.na(arr_delay)))) %>%
+  group_by(year, month, day) %>%
+  summarise(
+    cancelled_num = sum(cancelled),
+    flights_num = n()
+  )
+ggplot(data = cancelled_per_day) +
+  geom_point(mapping = aes(x = flights_num, y = cancelled_num))
+```
+
+```{r}
+# it works!!!
+cancelled_per_day <- 
+  flights %>%
+  mutate(cancelled = (is.na(arr_delay) | is.na(dep_delay))) %>%
+  group_by(year, month, day) %>%
+  summarise(
+    cancelled_num = sum(cancelled),
+    flights_num = n(),
+  )
+ggplot(cancelled_per_day) +
+  geom_point(aes(x = flights_num, y = cancelled_num))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

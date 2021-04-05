@@ -1,0 +1,49 @@
+---
+title: "Chapter 3 P51 exercise"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+```{r}
+# 1. How could you use arrange() to sort all missing values to the start? (Hint: use is.na().)
+arrange(flights, dep_time)
+arrange(flights, dep_time) %>%
+  tail()
+arrange(flights, desc(is.na(dep_time)), dep_time)
+# The flights will first be sorted by desc(is.na(dep_time)). Since desc(is.na(dep_time)) is either TRUE when dep_time is missing, or FALSE, when it is not, the rows with missing values of dep_time will come first, since TRUE > FALSE.
+```
+
+```{r}
+# 2. Sort flights to find the most delayed flights. Find the flights that left earliest.
+summary(flights$dep_delay)
+arrange(flights, desc(dep_delay))
+arrange(flights, dep_delay)
+```
+
+```{r}
+# 3. Sort flights to find the fastest flights
+flights
+arrange(flights, air_time) # flight 4368, tailnum N16911 EWR to BDL, 2013-01-16; flight 4631 N12167, 2013-04-13
+```
+
+```{r}
+# 4. Which flights traveled the longest? Which traveled the shortest?
+flights
+arrange(flights, desc(distance))
+arrange(flights, distance)
+# The shortest flight is US 1632, EWR to LGA, which is only 17 miles. This is a flight between two of the New York area airports. However, since this flight is missing a departure time so it either did not actually fly or there is a problem with the data
+```
+

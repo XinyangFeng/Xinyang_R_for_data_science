@@ -1,0 +1,68 @@
+---
+title: "Chapter 3 P49 exercise"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+```{r}
+# 1. Find all flights that:
+#a. Had an arrival delay of two or more hours
+#b. Flew to Houston (IAH or HOU)
+#c. Were operated by United, American, or Delta
+#d. Departed in summer (July, August, and September)
+#e. Arrived more than two hours late, but didn’t leave late
+#f. Were delayed by at least an hour, but made up over 30 minutes in flight
+#g. Departed between midnight and 6 a.m. (inclusive)
+?flights
+
+(on_time <- filter(flights, (dep_delay >= 120 | arr_time >= 120)))
+
+(Hou_IAH <- filter(flights, (dest == 'HOU' | dest == 'IAH')))
+
+airlines
+(opr <- filter(flights, carrier %in% c('AA', 'DL', 'UA')))
+
+(summer <- filter(flights, month %in% c(7, 8, 9)))
+
+(dep <- filter(flights, (arr_delay >= 120 & dep_delay <= 0)))
+
+summary(flights$dep_time)
+(dep_24_6 <- filter(flights, (dep_time <= 600 | dep_time == 2400)))
+```
+
+```{r}
+# 2. Another useful dplyr filtering helper is between(). What does it do? Can you use it to simplify the code needed to answer the previous challenges?
+?between()
+# This is a shortcut for x >= left & x <= right, implemented efficiently in C++ for local values, and translated to the appropriate SQL for remote tables.
+# filter(starwars, between(height, 100, 150))
+(summer <- filter(flights, between(month, 7, 9)))
+```
+
+```{r}
+# 3. How many flights have a missing dep_time? What other variables are missing? What might these rows represent?
+filter(flights, is.na(dep_time))
+# Notably, the arrival time (arr_time) is also missing for these rows. These seem to be cancelled flights.
+```
+
+```{r}
+# 4. Why is NA ^ 0 not missing? Why is NA | TRUE not missing? Why is FALSE & NA not missing? Can you figure out the general rule? (NA * 0 is a tricky counterexample!)
+NA ^ 0 # since for all numerical x, x ^ 0 == 1
+NA | TRUE # since anything or TRUE is TRUE
+FALSE & NA # since anything and FALSE is FALSE
+NA * 0 # it does not include plus minus infinity
+Inf * 0 # not a number
+```
+

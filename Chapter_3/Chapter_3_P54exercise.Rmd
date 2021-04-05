@@ -1,0 +1,45 @@
+---
+title: "Chapter 3 P54 exercise"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+```{r}
+# 1. Brainstorm as many ways as possible to select dep_time, dep_delay, arr_time, and arr_delay from flights.
+select(flights, dep_time, dep_delay, arr_time, arr_delay)
+select(flights, starts_with('dep') | starts_with('arr'))
+```
+
+```{r}
+# 2. What happens if you include the name of a variable multiple times in a select() call?
+select(flights, arr_time : arr_delay, arr_delay: tailnum)
+# The select() call ignores the duplication. Any duplicated variables are only included once, in the first location they appear. The select() function does not raise an error or warning or print any message if there are duplicated variables.
+```
+
+```{r}
+# 3. What does the one_of() function do? Why might it be helpful in conjunction with this vector?
+vars <- c(
+  "year", "month", "day", "dep_delay", "arr_delay"
+)
+?one_of()
+?any_of()
+```
+
+```{r}
+# 4. Does the result of running the following code surprise you? How do the select helpers deal with case by default? How can you change that default?
+select(flights, contains("TIME"))
+```
+
